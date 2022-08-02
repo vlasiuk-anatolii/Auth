@@ -1,5 +1,5 @@
 // import { useNavigate } from 'react-router-dom'
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import {
@@ -12,7 +12,7 @@ import {
   Input,
   TextField,
 } from '@mui/material';
-// import { registerUser } from '../../api';
+import { registerUser } from '../../api';
 import Logo from '../Logo/Logo';
 import './SignUp.scss';
 
@@ -21,27 +21,36 @@ export function SignUp() {
   const [username, setUserName] = useState('');
   const [displayName, setDisplayName] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  // const navigate = useNavigate();
+  const [isUserNameExist, setIsUserNameExist] = useState(false);
+  const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const handlerForm = async () => {
-    // if (password && username && displayName) {
-    //   if (password.length < 8) {}
-    //   const response = await registerUser(password, username, displayName);
+    if (password && username && displayName) {
+      if (!(/[\w\D]{8,}/g).test(password)) {
+        setError(true);
+      } else {
+        setError(false);
+      }
 
-    //   if (!response.ok) {
-    //     if (response.status === 409) {
-    //       setError('Username is already used by another user');
-    //     }
+      const response = await registerUser(password, username, displayName);
 
-    //     throw new Error(`${response.status} - ${response.statusText}`);
-    //   } else {
-    //     setPassword('');
-    //     setUsername('');
-    //     setDisplayName('');
-    //     setEmail('');
-    //     navigate('/home', { replace: true });
-    //   }
-    // }
+      // eslint-disable-next-line no-console
+      console.log(response);
+
+      if (!response.ok) {
+        if (response.status === 409) {
+          setIsUserNameExist(true);
+        }
+        // throw new Error(`${response.status} - ${response.statusText}`);
+      } else {
+        setIsUserNameExist(false);
+        setPassword('');
+        setUserName('');
+        setDisplayName('');
+        navigate('/home', { replace: true });
+      }
+    }
   };
 
   const theme = createTheme({
@@ -65,45 +74,42 @@ export function SignUp() {
     },
   });
 
-  // eslint-disable-next-line no-console
-  console.log(theme);
-
   return (
     <>
       <section className="signup">
         <Logo />
         <p className="signup__title">SIGN UP</p>
         <ThemeProvider theme={theme}>
-          <FormControl onSubmit={handlerForm} className="signup__form">
+          <FormControl className="signup__form">
+
+            <TextField
+              label={isUserNameExist ? 'Username is already exist' : 'User Name'}
+              variant="standard"
+              color="primary"
+              placeholder="Example Name"
+              value={username}
+              onChange={(event) => {
+                setUserName(event.target.value);
+              }}
+            />
+
+            <TextField
+              label="Display Name"
+              variant="standard"
+              color="primary"
+              placeholder="Example123"
+              value={displayName}
+              onChange={(event) => {
+                setDisplayName(event.target.value);
+              }}
+            />
 
             <FormControl>
-              <TextField
-                label="Full Name"
-                variant="standard"
-                color="primary"
-                placeholder="Example Name"
-                value={username}
-                onChange={(event) => {
-                  setUserName(event.target.value);
-                }}
-              />
-            </FormControl>
-
-            <FormControl>
-              <TextField
-                label="User Name"
-                variant="standard"
-                color="primary"
-                placeholder="Example123"
-                value={displayName}
-                onChange={(event) => {
-                  setDisplayName(event.target.value);
-                }}
-              />
-            </FormControl>
-
-            <FormControl>
-              <InputLabel sx={{ left: '-13px' }} htmlFor="standard-adornment-password">Password</InputLabel>
+              <InputLabel sx={{ left: '-13px' }} htmlFor="standard-adornment-password">
+                <span>
+                  {error ? 'Wrong password' : 'Password'}
+                </span>
+              </InputLabel>
               <Input
                 id="standard-adornment-password"
                 type={isPasswordVisible ? 'text' : 'password'}
@@ -130,7 +136,13 @@ export function SignUp() {
               />
             </FormControl>
 
-            <button type="submit" className="signup__button">
+            <button
+              type="button"
+              className="signup__button"
+              onClick={() => {
+                handlerForm();
+              }}
+            >
               <span className="signup__buttonname">Sign Up</span>
             </button>
             <p className="signup__undernotice signup__undernotice--up">
@@ -144,82 +156,3 @@ export function SignUp() {
     </>
   );
 }
-
-// eslint-disable-next-line no-lone-blocks
-{ /* <label
-              htmlFor="password"
-              className="sign__labelpassword"
-            >
-              Password
-
-              <input
-                id="password"
-                type="password"
-                required
-                value={password}
-                onChange={(event) => {
-                  setPassword(event.target.value);
-                }}
-                className="sign__inputpassword"
-                placeholder="***************"
-              />
-            </label> */ }
-
-// eslint-disable-next-line no-lone-blocks
-{ /* <label
-              htmlFor="email"
-              className="sign__labelemail"
-            >
-              Email Address
-
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(event) => {
-                  setEmail(event.target.value);
-                }}
-                className="sign__inputemail"
-                placeholder="example@gmail.com"
-              />
-            </label> */ }
-
-// eslint-disable-next-line no-lone-blocks
-{ /* <label
-              htmlFor="email"
-              className="sign__labelemail"
-            >
-              User Name
-
-              <input
-                id="username"
-                type="text"
-                required
-                value={displayName}
-                onChange={(event) => {
-                  setDisplayName(event.target.value);
-                }}
-                className="sign__inputemail"
-                placeholder="Example1488"
-              />
-            </label> */ }
-
-// eslint-disable-next-line no-lone-blocks
-{ /* <label
-            htmlFor="fullname"
-            className="sign__labelemail"
-          >
-            Full Name
-
-            <input
-              id="fullname"
-              type="text"
-              required
-              value={username}
-              onChange={(event) => {
-                setUsername(event.target.value);
-              }}
-              className="sign__inputemail"
-              placeholder="Example Name"
-            />
-          </label> */ }

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { logOut } from '../../api';
 import Logo from '../Logo/Logo';
+import './Home.scss';
 
 export function Home() {
   const navigate = useNavigate();
@@ -17,28 +18,27 @@ export function Home() {
   };
 
   return (
-    <section className="sign sign--congrat">
-      <div className="sign__container sign__container--congrat">
-        <Logo />
-        <img
-          alt="congratulation"
-          className="sign__congratmainimg"
-          src="../../images/congrat.svg"
-        />
-      </div>
-      <p className="sign__congrattext">Now you are on the main page. Soon we will provide you with detailed feedback on the result of your work</p>
+    <section className="home">
+      <Logo />
+      <img
+        alt="congratulation"
+        className="home__congratmainimg"
+        src="../../images/congrat.png"
+      />
+
+      <p className="home__congrattext">Now you are on the main page. Soon we will provide you with detailed feedback on the result of your work</p>
       <button
         type="button"
-        className="sign__button sign__button--congrat"
+        className="home__button home__button--congrat"
         onClick={() => {
           handlerOnClick();
         }}
       >
-        <span className="sign__buttonname">See you</span>
+        <span className="home__buttonname">See you</span>
       </button>
       <img
         alt="congratulation people"
-        className="sign__congratpeopleimg"
+        className="home__congratpeopleimg"
         src="../../images/people.svg"
       />
     </section>
