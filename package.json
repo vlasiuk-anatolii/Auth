@@ -1,6 +1,6 @@
 {
-  "homepage": ".",
-  "name": "react-typescript-starter-pack",
+  "homepage": "https://vlasiuk-anatolii.github.io/auth",
+  "name": "auth",
   "version": "0.1.0",
   "dependencies": {
     "@emotion/react": "^11.9.3",
