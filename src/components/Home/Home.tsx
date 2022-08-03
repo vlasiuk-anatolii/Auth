@@ -23,7 +23,7 @@ export function Home() {
       <img
         alt="congratulation"
         className="home__congratmainimg"
-        src="../../images/congrat.png"
+        src="./images/congrat.png"
       />
 
       <p className="home__congrattext">Now you are on the main page. Soon we will provide you with detailed feedback on the result of your work</p>
@@ -39,7 +39,7 @@ export function Home() {
       <img
         alt="congratulation people"
         className="home__congratpeopleimg"
-        src="../../images/people.svg"
+        src="./images/people.svg"
       />
     </section>
   );
