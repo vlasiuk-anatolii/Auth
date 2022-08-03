@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/vlasiuk-anatolii/auth/static/css/main.5aae62ec.chunk.css",
+    "main.js": "/vlasiuk-anatolii/auth/static/js/main.60861885.chunk.js",
+    "main.js.map": "/vlasiuk-anatolii/auth/static/js/main.60861885.chunk.js.map",
+    "runtime-main.js": "/vlasiuk-anatolii/auth/static/js/runtime-main.2ca08fbf.js",
+    "runtime-main.js.map": "/vlasiuk-anatolii/auth/static/js/runtime-main.2ca08fbf.js.map",
+    "static/js/2.0fe2642e.chunk.js": "/vlasiuk-anatolii/auth/static/js/2.0fe2642e.chunk.js",
+    "static/js/2.0fe2642e.chunk.js.map": "/vlasiuk-anatolii/auth/static/js/2.0fe2642e.chunk.js.map",
+    "index.html": "/vlasiuk-anatolii/auth/index.html",
+    "static/css/main.5aae62ec.chunk.css.map": "/vlasiuk-anatolii/auth/static/css/main.5aae62ec.chunk.css.map",
+    "static/js/2.0fe2642e.chunk.js.LICENSE.txt": "/vlasiuk-anatolii/auth/static/js/2.0fe2642e.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.2ca08fbf.js",
+    "static/js/2.0fe2642e.chunk.js",
+    "static/css/main.5aae62ec.chunk.css",
+    "static/js/main.60861885.chunk.js"
+  ]
+}
