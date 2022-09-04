@@ -1,4 +1,3 @@
-// import { useNavigate } from 'react-router-dom'
 import { NavLink, useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
@@ -18,59 +17,71 @@ import './SignUp.scss';
 
 export function SignUp() {
   const [password, setPassword] = useState('');
-  const [username, setUserName] = useState('');
+  const [isPasswordRight, setIsPasswordRight] = useState('');
+  const [userName, setUserName] = useState('');
+  const [isUsernameRight, setIsUsernameRight] = useState('');
   const [displayName, setDisplayName] = useState('');
+  const [isDisplayNameRight, setIsDisplayNameRight] = useState('');
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const [isUserNameExist, setIsUserNameExist] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handlerForm = async () => {
-    if (password && username && displayName) {
-      if (!(/[\w\D]{8,}/g).test(password)) {
-        setError(true);
+  const regUser = async () => {
+    const response = await registerUser(password, userName, displayName);
+
+    if (!response.ok) {
+      if (response.status === 409) {
+        setIsUserNameExist(true);
       } else {
-        setError(false);
+        setError(`${response.statusText}`);
       }
-
-      const response = await registerUser(password, username, displayName);
-
-      // eslint-disable-next-line no-console
-      console.log(response);
-
-      if (!response.ok) {
-        if (response.status === 409) {
-          setIsUserNameExist(true);
-        }
-        // throw new Error(`${response.status} - ${response.statusText}`);
-      } else {
-        setIsUserNameExist(false);
-        setPassword('');
-        setUserName('');
-        setDisplayName('');
-        navigate('/home', { replace: true });
-      }
+    } else {
+      setIsUserNameExist(false);
+      setPassword('');
+      setUserName('');
+      setDisplayName('');
+      navigate('/home', { replace: true });
     }
+  };
+
+  const handlerForm = () => {
+    if (userName.length === 0) {
+      setIsDisplayNameRight('You should fill field User Name');
+    } else {
+      setIsDisplayNameRight('');
+    }
+
+    if (displayName.length === 0) {
+      setIsDisplayNameRight('You should fill field Display Name');
+    } else {
+      setIsDisplayNameRight('');
+    }
+
+    if (!(/.{8,}/g).test(password)) {
+      setIsPasswordRight('Password should contain not less 8 characters');
+    } else {
+      setIsPasswordRight('');
+    }
+
+    if (!(/[a-zA-Z\s]/g).test(userName)) {
+      setIsUsernameRight('Username should contain only letters');
+    } else {
+      setIsUsernameRight('');
+    }
+
+    regUser();
   };
 
   const theme = createTheme({
     palette: {
       mode: 'dark',
       primary: {
-        main: '#ffffff',
+        main: '#fff',
       },
     },
     typography: {
       fontFamily: 'Montserrat',
-    },
-    components: {
-      MuiInputBase: {
-        styleOverrides: {
-          root: {
-            marginBottom: '35px',
-          },
-        },
-      },
     },
   });
 
@@ -79,26 +90,32 @@ export function SignUp() {
       <section className="signup">
         <Logo />
         <p className="signup__title">SIGN UP</p>
+        {error && <p className="signup__errorfromserver">{error}</p>}
         <ThemeProvider theme={theme}>
-          <FormControl className="signup__form">
-
+          <FormControl
+            className="signup__form"
+          >
             <TextField
+              sx={{ marginBottom: '20px' }}
               label={isUserNameExist ? 'Username is already exist' : 'User Name'}
               variant="standard"
               color="primary"
               placeholder="Example Name"
-              value={username}
+              value={userName}
+              helperText={isUsernameRight.length === 0 ? '' : `${isUsernameRight}`}
               onChange={(event) => {
                 setUserName(event.target.value);
               }}
             />
 
             <TextField
+              sx={{ marginBottom: '20px' }}
               label="Display Name"
               variant="standard"
               color="primary"
               placeholder="Example123"
               value={displayName}
+              helperText={isDisplayNameRight.length === 0 ? '' : `${isDisplayNameRight}`}
               onChange={(event) => {
                 setDisplayName(event.target.value);
               }}
@@ -106,9 +123,7 @@ export function SignUp() {
 
             <FormControl>
               <InputLabel sx={{ left: '-13px' }} htmlFor="standard-adornment-password">
-                <span>
-                  {error ? 'Wrong password' : 'Password'}
-                </span>
+                Password
               </InputLabel>
               <Input
                 id="standard-adornment-password"
@@ -134,17 +149,18 @@ export function SignUp() {
                   </InputAdornment>
                 )}
               />
+              {isPasswordRight.length !== 0 && <p className="signup__errorpassword">{isPasswordRight}</p>}
+              <button
+                type="button"
+                className="signup__button"
+                onClick={() => {
+                  handlerForm();
+                }}
+              >
+                <span className="signup__buttonname">Sign Up</span>
+              </button>
             </FormControl>
 
-            <button
-              type="button"
-              className="signup__button"
-              onClick={() => {
-                handlerForm();
-              }}
-            >
-              <span className="signup__buttonname">Sign Up</span>
-            </button>
             <p className="signup__undernotice signup__undernotice--up">
               I have an account.
               {' '}
